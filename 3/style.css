@@ -1,0 +1,16 @@
+@font-face {
+	font-family:Nunito-SemiBoldItalic;
+	src: url(Nunito-SemiBoldItalic.ttf);
+}
+html {
+	background: linear-gradient(to bottom, #efc023, #ff0000); 
+    min-height: 100%;
+	position: relative;
+	overflow: hidden;
+}
+body {
+	color:#22ff00;
+	margin:30px auto 0;
+    width: fit-content;
+    font-family: Nunito-SemiBoldItalic;
+}
