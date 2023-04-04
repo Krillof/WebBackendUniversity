@@ -72,7 +72,7 @@ include 'includes.php';
                       foreach ($db->query("SELECT * FROM Ability;") as $row){
                         print '<option value="'.intval($row['id']).'">'.$row['_name'].'</option>';
                       }
-                    } catch(){
+                    } catch(PDOException $e){
                       send_error_and_exit("Db connection error", "500");
                     }
                   ?>
