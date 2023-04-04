@@ -91,5 +91,10 @@ include 'includes.php';
         
               <input type="submit" value="Отправить">
             </form>
+
+            <br>
+            <img src="1.PNG">
+            <br>
+            <img src="2.PNG">
     </body>
 </html>
