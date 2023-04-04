@@ -1,9 +1,12 @@
 html {
 	background: gray; 
-    min-height: 100%;
+        min-height: 100%;
 }
 body {
 	color: white;
 	margin:30px auto 0;
-    width: fit-content;
+        width: fit-content;
+}
+td {
+        border: 1px solid black;
 }
