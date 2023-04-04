@@ -102,8 +102,9 @@ include 'includes.php';
                       foreach ($db->query("SELECT * FROM Person;") as $person){
                         $abilities = '';
                         foreach ($db->query('SELECT * FROM Person_Ability WHERE person_id='.$person['id'].';') as $pa){
-                          $a = $db->query('SELECT _name FROM Ability WHERE id='.$pa['id'].';');
-                          $abilities = $abilities.' '.$a[0]['_name'];
+                          foreach ($db->query('SELECT _name FROM Ability WHERE id='.$pa['id'].';') as $a){
+                            $abilities = $abilities.' '.$a['_name'];
+                          }
                         }
                         print '<tr><td>'.$person['full_name'].'</td><td>'.$abilities.'</td></tr>';
                       }
