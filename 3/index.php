@@ -96,5 +96,21 @@ include 'includes.php';
             <img src="1.PNG">
             <br>
             <img src="2.PNG">
+            <table>
+            <?php
+                   try {
+                      foreach ($db->query("SELECT * FROM Person;") as $person){
+                        $abilities = '';
+                        foreach ($db->query('SELECT * FROM Person_Ability WHERE person_id='.$person['id'].';') as $pa){
+                          $a = $db->query('SELECT _name FROM Ability WHERE id='.$pa['id'].';');
+                          $abilities = $abilities.' '.$a[0]['_name'];
+                        }
+                        print '<tr><td>'.$person['full_name'].'</td><td>'.$abilities.'</td></tr>';
+                      }
+                    } catch(PDOException $e){
+                      send_error_and_exit("Db connection error", "500");
+                    }
+             ?>
+             </table>
     </body>
 </html>
