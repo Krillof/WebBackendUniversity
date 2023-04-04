@@ -101,8 +101,8 @@ include 'includes.php';
                    try {
                       foreach ($db->query("SELECT * FROM Person;") as $person){
                         $abilities = '';
-                        foreach ($db->query('SELECT * FROM Person_Ability WHERE person_id='.$person['id'].';') as $pa){
-                          foreach ($db->query('SELECT _name FROM Ability WHERE id='.$pa['id'].';') as $a){
+                        foreach ($db->query('SELECT * FROM Person_Ability WHERE person_id='.intval($person['id']).';') as $pa){
+                          foreach ($db->query('SELECT _name FROM Ability WHERE id='.intval($pa['id']).';') as $a){
                             $abilities = $abilities.' '.$a['_name'];
                           }
                         }
