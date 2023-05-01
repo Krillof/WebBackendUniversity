@@ -20,6 +20,8 @@ $columns[] = 'email';
 $columns[] = 'birth_year';
 $columns[] = 'limbs_amount';
 $columns[] = 'is_male';
+$columns[] = 'biography';
+$columns[] = 'powers';
 
 // Отправляем браузеру правильную кодировку,
 // файл index.php должен быть в кодировке UTF-8 без BOM.
@@ -68,14 +70,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   // Проверяем ошибки.
   $errors = FALSE;
 
-
   if (empty($_POST['full_name'])) {
     // Выдаем куку на день с флажком об ошибке в поле fio.
     setcookie('full_name_error', 'Enter your name, please', time() + 24 * 60 * 60);
     $errors = TRUE;
-  } else {
-    // Сохраняем ранее введенное в форму значение на месяц.
-    setcookie('full_name', $_POST['full_name'], time() + 30 * 24 * 60 * 60);
   }
 
   if (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
@@ -84,22 +82,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     else
       setcookie('email_error', 'Mail is invalid', time() + 24 * 60 * 60);
     $errors = TRUE;
-  } else {
-    setcookie('email', $_POST['email'], time() + 30 * 24 * 60 * 60);
   }
 
   if (!isset($_POST['birth_year'])) {
     setcookie('birth_year_error', 'Year is not set', time() + 24 * 60 * 60);
     $errors = TRUE;
-  } else {
-    setcookie('birth_year', $_POST['birth_year'], time() + 30 * 24 * 60 * 60);
   }
 
   if (!isset($_POST['limbs_amount'])) {
     setcookie('limbs_amount_error', 'Limbs number is not set', time() + 24 * 60 * 60);
     $errors = TRUE;
-  } else {
-    setcookie('limbs_amount', $_POST['limbs_amount'], time() + 30 * 24 * 60 * 60);
   }
 
   if (!isset($_POST['is_male']) || ($_POST['is_male']!=0 && $_POST['is_male']!=1)) {
@@ -108,12 +100,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     else
       setcookie('is_male_error', 'Gender is invalid', time() + 24 * 60 * 60);
     $errors = TRUE;
-  } else {
-    setcookie('is_male', $_POST['is_male'], time() + 30 * 24 * 60 * 60);
   }
 
+  if (!isset($_POST['powers'])) {
+    setcookie('powers_error', 'You have to choose minimum one power', time() + 24 * 60 * 60);
+    $errors = TRUE;
+  }
 
-  
   if ($errors) {
     // При наличии ошибок перезагружаем страницу и завершаем работу скрипта.
     header('Location: index.php');
@@ -125,6 +118,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       setcookie($column.'_error', '', 100000);
   }
 
+
+  // Сохраняем ранее введенное в форму значение на месяц.
+  foreach ($columns as $column)
+    setcookie($column, $_POST[$column], time() + 30 * 24 * 60 * 60);
+  
+
+  // Сохраняем в бд
   try {
     $stmt = $db->prepare(
       "INSERT INTO Person ".
@@ -144,16 +144,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (!$stmtErr) 
       send_error_and_exit("Some server issue","500");
     $strId = $db->lastInsertId();
-    if (isset($_POST['powers'])) {
-          foreach ($_POST['powers'] as $item) {
-              $stmt = $db->prepare(
-                  "INSERT INTO Person_Ability (person_id, ability_id) VALUES (:p, :a);"
-              );
-              $stmtErr = $stmt->execute(['p' => intval($strId), 'a' => $item]);
-              if (!$stmtErr)
-                  send_error_and_exit("Some server issue","500");
-          }
+    
+    foreach ($_POST['powers'] as $item) {
+      $stmt = $db->prepare(
+        "INSERT INTO Person_Ability (person_id, ability_id) VALUES (:p, :a);"
+      );
+      $stmtErr = $stmt->execute(['p' => intval($strId), 'a' => $item]);
+      if (!$stmtErr)
+        send_error_and_exit("Some server issue","500");
     }
+    
   }
   catch(PDOException $e){
       send_error_and_exit("Some server issue","500");

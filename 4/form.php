@@ -68,22 +68,12 @@ if (!empty($messages)) {
 
                 <?php 
                   for ($i = 1; $i <= 4; $i++) {
-                    if ()
-                    print '<label><input type="radio" name="limbs_amount" value="'.$i.'"'..' required>'.$i.'</label>';
+                    if ($i == $values['limbs_amount'])
+                      print '<label><input type="radio" name="limbs_amount" value="'.$i.'"'..' required checked>'.$i.'</label>';
+                    else
+                      print '<label><input type="radio" name="limbs_amount" value="'.$i.'"'..' required>'.$i.'</label>';
                   }
                 ?>
-                <label><input type="radio"
-                  name="limbs_amount" value="1" required>
-                  1</label>
-                <label><input type="radio"
-                  name="limbs_amount" value="2" required>
-                  2</label>
-                <label><input type="radio"
-                  name="limbs_amount" value="3" required>
-                  3</label>
-                <label><input type="radio" 
-                  name="limbs_amount" value="4" checked required>
-                  4</label><br>
               </div>
 
 
@@ -95,7 +85,10 @@ if (!empty($messages)) {
                   <?php
                     try {
                       foreach ($db->query("SELECT * FROM Ability;") as $row){
-                        print '<option value="'.intval($row['id']).'">'.$row['_name'].'</option>';
+                        if ($values['powers'].indexOf($row['_name']) >= 0) // if contains - then selected
+                          print '<option value="'.intval($row['id']).'" selected>'.$row['_name'].'</option>';
+                        else
+                          print '<option value="'.intval($row['id']).'">'.$row['_name'].'</option>';
                       }
                     } catch(PDOException $e){
                       send_error_and_exit("Db connection error", "500");
@@ -106,7 +99,7 @@ if (!empty($messages)) {
         
               <label <?php if ($errors['biography']) {print 'class="error"';} ?>>
                 Биография:<br>
-                <textarea name="biography"></textarea>
+                <textarea name="biography" value="<?php print $values['biography'] ?>"></textarea>
               </label><br>
         
               Согласие c лицензионным соглашением:<br>
@@ -134,11 +127,5 @@ if (!empty($messages)) {
                     }
              ?>
             </table>
-    <!--
-    <form action="" method="POST">
-      <input name="fio" <?php if ($errors['fio']) {print 'class="error"';} ?> value="<?php print $values['fio']; ?>" />
-      <input type="submit" value="ok" />
-    </form>
-                  -->
   </body>
 </html>
