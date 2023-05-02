@@ -5,7 +5,7 @@
  * введенными значениями.
  */
 
-include 'includes.php';
+include_once 'includes.php';
 
 
 $columns = array();
