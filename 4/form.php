@@ -86,9 +86,7 @@ if (!empty($messages)) {
                 <select name="powers[]"
                   multiple="multiple">
                   <?php
-                    print '<pre>';
-                    print_r();
-                    print '</pre>';
+                    
                     try {
                       foreach ($db->query("SELECT * FROM Ability;") as $row){
                         if (isset($values['powers'])){
