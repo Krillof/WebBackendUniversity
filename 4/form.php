@@ -88,7 +88,7 @@ if (!empty($messages)) {
                   <?php
                     try {
                       foreach ($db->query("SELECT * FROM Ability;") as $row){
-                        if ($values['powers'].indexOf($row['_name']) >= 0) // if contains - then selected
+                        if ($values['powers']->indexOf($row['_name']) >= 0) // if contains - then selected
                           print '<option value="'.intval($row['id']).'" selected>'.$row['_name'].'</option>';
                         else
                           print '<option value="'.intval($row['id']).'">'.$row['_name'].'</option>';
