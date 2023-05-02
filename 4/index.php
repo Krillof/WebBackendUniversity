@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
   // Сохраняем ранее введенное в форму значение на месяц.
   foreach ($columns as $column)
-    setcookie($column, $_POST[$column], time() + 30 * 24 * 60 * 60);
+    setcookie($column.'_value', $_POST[$column], time() + 30 * 24 * 60 * 60);
   
 
 
