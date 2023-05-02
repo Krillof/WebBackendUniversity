@@ -11,7 +11,7 @@
 
 <?php
 
-include 'includes.php';
+include_once 'includes.php';
 
 if (!empty($messages)) {
   print('<div id="messages">');
