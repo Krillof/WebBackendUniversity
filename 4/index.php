@@ -5,10 +5,8 @@
  * введенными значениями.
  */
 
-if (!isset($included)){
-  include 'includes.php';
-  $included = True;
-}
+include 'includes.php';
+
 
 $columns = array();
 $columns[] = 'full_name';
