@@ -69,9 +69,9 @@ if (!empty($messages)) {
                 <?php 
                   for ($i = 1; $i <= 4; $i++) {
                     if ($i == $values['limbs_amount'])
-                      print '<label><input type="radio" name="limbs_amount" value="'.$i.'"'..' required checked>'.$i.'</label>';
+                      print '<label><input type="radio" name="limbs_amount" value="'.$i.'"'.' required checked>'.$i.'</label>';
                     else
-                      print '<label><input type="radio" name="limbs_amount" value="'.$i.'"'..' required>'.$i.'</label>';
+                      print '<label><input type="radio" name="limbs_amount" value="'.$i.'"'.' required>'.$i.'</label>';
                   }
                 ?>
               </div>
