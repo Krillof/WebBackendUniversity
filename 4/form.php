@@ -27,7 +27,7 @@ if (!empty($messages)) {
               <label  <?php if ($errors['full_name']) {print 'class="error"';} ?>>
                 Имя:<br>
                 <input name="full_name"
-                  value="<?php print $values['fullname']; ?>"
+                  value="<?php print $values['full_name']; ?>"
                   placeholder="Имя" required>
               </label><br>
         
