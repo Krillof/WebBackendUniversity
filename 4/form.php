@@ -10,6 +10,12 @@
   <body>
 
 <?php
+
+if (!isset($included)){
+  include 'includes.php';
+  $included = True;
+}
+
 if (!empty($messages)) {
   print('<div id="messages">');
   // Выводим все сообщения.
