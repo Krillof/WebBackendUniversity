@@ -11,10 +11,7 @@
 
 <?php
 
-if (!isset($included)){
-  include 'includes.php';
-  $included = True;
-}
+include 'includes.php';
 
 if (!empty($messages)) {
   print('<div id="messages">');
