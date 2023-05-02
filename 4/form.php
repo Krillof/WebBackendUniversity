@@ -86,7 +86,7 @@ if (!empty($messages)) {
                 <select name="powers[]"
                   multiple="multiple">
                   <?php
-                    print_r($values['powers'];
+                    print_r($values['powers']);
                     try {
                       foreach ($db->query("SELECT * FROM Ability;") as $row){
                         if (in_array($row['_name'], $values['powers'])) // if contains - then selected
