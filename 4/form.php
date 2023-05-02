@@ -94,7 +94,6 @@ if (!empty($messages)) {
                           print '<option value="'.intval($row['id']).'">'.$row['_name'].'</option>';
                       }
                     } catch(PDOException $e){
-                      print "errrrr";
                       send_error_and_exit("Db connection error", "500");
                     }
                   ?>
