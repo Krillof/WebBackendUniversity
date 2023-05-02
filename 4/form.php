@@ -87,14 +87,18 @@ if (!empty($messages)) {
                   multiple="multiple">
                   <?php
                     print '<pre>';
-                    print_r($values['powers']);
+                    print_r();
                     print '</pre>';
                     try {
                       foreach ($db->query("SELECT * FROM Ability;") as $row){
-                        if (in_array($row['_name'], $values['powers'])) // if contains - then selected
-                          print '<option value="'.intval($row['id']).'" selected>'.$row['_name'].'</option>';
-                        else
+                        if (isset($values['powers'])){
+                          if (in_array($row['_name'], $values['powers'])) // if contains - then selected
+                            print '<option value="'.intval($row['id']).'" selected>'.$row['_name'].'</option>';
+                          else
+                            print '<option value="'.intval($row['id']).'">'.$row['_name'].'</option>';
+                        } else {
                           print '<option value="'.intval($row['id']).'">'.$row['_name'].'</option>';
+                        }
                       }
                     } catch(PDOException $e){
                       send_error_and_exit("Db connection error", "500");
