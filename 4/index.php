@@ -5,6 +5,11 @@
  * введенными значениями.
  */
 
+if (!isset($included)){
+  include 'includes.php';
+  $included = True;
+}
+
 
 function send_error_and_exit($error_message, $error_code="400"){
   header("HTTP/1.1 " . $error_code . " " . $error_message);
