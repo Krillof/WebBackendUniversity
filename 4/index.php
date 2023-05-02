@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   // Складываем предыдущие значения полей в массив, если есть.
   $values = array();
   foreach ($columns as $column)
-    $values[$column] = empty($_COOKIE[$column.'_value']) ? '' : $_COOKIE[$column.'_value'];
+    $values[$column] = empty($_COOKIE[$column.'_value']) ? '' : json_decode($_COOKIE[$column.'_value']);
 
   // Включаем содержимое файла form.php.
   // В нем будут доступны переменные $messages, $errors и $values для вывода 
@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
   // Сохраняем ранее введенное в форму значение на месяц.
   foreach ($columns as $column)
-    setcookie($column.'_value', $_POST[$column], time() + 30 * 24 * 60 * 60);
+    setcookie($column.'_value', json_encode($_POST[$column]), time() + 30 * 24 * 60 * 60);
   
 
 
