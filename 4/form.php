@@ -87,7 +87,7 @@ if (!empty($messages)) {
                   multiple="multiple">
                   <?php
                     print '<pre>';
-                    print_r($values['powers']);
+                    print_r($values);
                     print </pre>';
                     try {
                       foreach ($db->query("SELECT * FROM Ability;") as $row){
