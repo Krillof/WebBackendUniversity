@@ -101,6 +101,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $errors = TRUE;
   }
 
+
+  // Сохраняем ранее введенное в форму значение на месяц.
+  foreach ($columns as $column)
+    setcookie($column, $_POST[$column], time() + 30 * 24 * 60 * 60);
+  
+
+
   if ($errors) {
     // При наличии ошибок перезагружаем страницу и завершаем работу скрипта.
     header('Location: index.php');
@@ -112,11 +119,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       setcookie($column.'_error', '', 100000);
   }
 
-
-  // Сохраняем ранее введенное в форму значение на месяц.
-  foreach ($columns as $column)
-    setcookie($column, $_POST[$column], time() + 30 * 24 * 60 * 60);
-  
 
   // Сохраняем в бд
   try {
