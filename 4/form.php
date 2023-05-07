@@ -88,11 +88,6 @@ if (!empty($messages)) {
 
             <label>
                 Суперсилы:
-                <?php 
-                var_dump($values['full_name']);
-                print('<br>');
-                var_dump($values['powers']);
-                ?>
                 <br>
                 <select
                   <?php if ($errors['powers']) {print 'class="error"';} ?>
@@ -102,7 +97,7 @@ if (!empty($messages)) {
                     try {
                       foreach ($db->query("SELECT * FROM Ability;") as $row){
                         if (isset($values['powers'])){
-                          if (in_array($row['_name'], $values['powers'])) // if contains - then selected
+                          if (in_array($row['id'], $values['powers'])) // if contains - then selected
                             print '<option value="'.intval($row['id']).'" selected>'.$row['_name'].'</option>';
                           else
                             print '<option value="'.intval($row['id']).'">'.$row['_name'].'</option>';
@@ -121,7 +116,8 @@ if (!empty($messages)) {
                 Биография:<br>
                 <textarea 
                   <?php if ($errors['biography']) {print 'class="error"';} ?>
-                  name="biography" value="<?php print $values['biography'] ?>">
+                  name="biography">
+                  <?php print $values['biography'] ?>
                 </textarea>
               </label><br>
         
