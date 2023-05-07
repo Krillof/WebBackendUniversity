@@ -1,8 +1,8 @@
 CREATE TABLE Person (
   id int(10) unsigned NOT NULL AUTO_INCREMENT,
   full_name varchar(128) NOT NULL DEFAULT '',
-  _login varchar(10) NOT NULL,
-  password_hash varchar(200) NOT NULL,
+  _login varchar(10) DEFAULT NULL,
+  password_hash varchar(200) DEFAULT NULL,
   email varchar(128) NOT NULL DEFAULT '',
   birth_year int(10) NOT NULL DEFAULT 0,
   is_male BOOLEAN NOT NULL DEFAULT 1,
