@@ -89,9 +89,9 @@ if (!empty($messages)) {
             <label>
                 Суперсилы:
                 <?php 
-                var_dump($errors['full_name']);
+                var_dump($values['full_name']);
                 print('<br>');
-                var_dump($errors['powers']);
+                var_dump($values['powers']);
                 ?>
                 <br>
                 <select
