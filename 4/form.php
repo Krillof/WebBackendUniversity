@@ -120,9 +120,7 @@ if (!empty($messages)) {
                 <br>
                 <textarea 
                   <?php if ($errors['biography']) {print 'class="error"';} ?>
-                  name="biography">
-                  <?php print trim($values['biography']) ?>
-                </textarea>
+                  name="biography"><?php print trim($values['biography']) ?></textarea>
               </label><br>
         
               Согласие c лицензионным соглашением:<br>
