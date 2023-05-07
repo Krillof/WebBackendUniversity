@@ -88,6 +88,11 @@ if (!empty($messages)) {
 
             <label>
                 Суперсилы:
+                <?php 
+                var_dump($errors['full_name']);
+                print('<br>');
+                var_dump($errors['powers']);
+                ?>
                 <br>
                 <select
                   <?php if ($errors['powers']) {print 'class="error"';} ?>
@@ -138,7 +143,7 @@ if (!empty($messages)) {
                             $abilities = $abilities.'     '.$a['_name'];
                           }
                         }
-                        print '<tr><td>'.$person['full_name'].' ::::: </td><td>'.$abilities.'</td></tr>';
+                        print '<tr><td>'.$person['full_name'].'</td><td>'.$abilities.'</td></tr>';
                       }
                     } catch(PDOException $e){
                       send_error_and_exit("Db connection error", "500");

@@ -55,6 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   foreach ($columns as $column)
     $values[$column] = empty($_COOKIE[$column.'_value']) ? '' : json_decode($_COOKIE[$column.'_value']);
 
+  
+
   // Включаем содержимое файла form.php.
   // В нем будут доступны переменные $messages, $errors и $values для вывода 
   // сообщений, полей с ранее заполненными данными и признаками ошибок.
