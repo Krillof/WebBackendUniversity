@@ -113,7 +113,11 @@ if (!empty($messages)) {
               </label><br>
         
               <label >
-                Биография:<br>
+                Биография:
+                <?php 
+                var_dump($values['biography']);
+                ?>
+                <br>
                 <textarea 
                   <?php if ($errors['biography']) {print 'class="error"';} ?>
                   name="biography">
