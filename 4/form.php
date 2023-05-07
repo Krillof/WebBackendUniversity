@@ -27,24 +27,30 @@ if (!empty($messages)) {
 ?>
 
   <form action="" method="POST">
-              <label  <?php if ($errors['full_name']) {print 'class="error"';} ?>>
+              <label >
                 Имя:<br>
-                <input name="full_name"
+                <input 
+                  <?php if ($errors['full_name']) {print 'class="error"';} ?>
+                  name="full_name"
                   value="<?php print $values['full_name']; ?>"
                   placeholder="Имя" required>
               </label><br>
         
-              <label <?php if ($errors['email']) {print 'class="error"';} ?>>
+              <label>
                 E-mail:<br>
-                <input name="email"
+                <input 
+                  <?php if ($errors['email']) {print 'class="error"';} ?>
+                  name="email"
                   type="email"
                   value="<?php print $values['email']; ?>"
                   placeholder="e-mail" required>
               </label><br>
         
-              <label <?php if ($errors['birth_year']) {print 'class="error"';} ?>>
+              <label>
                 Год рождения:<br>
-                <select name="birth_year">
+                <select 
+                  <?php if ($errors['birth_year']) {print 'class="error"';} ?>
+                  name="birth_year">
                     <?php 
                       for ($i = 1923; $i <= 2023; $i++) {
                         if ($values['birth_year'] == $i)
@@ -83,7 +89,9 @@ if (!empty($messages)) {
             <label>
                 Суперсилы:
                 <br>
-                <select name="powers[]"
+                <select
+                  <?php if ($errors['powers']) {print 'class="error"';} ?>
+                  name="powers[]"
                   multiple="multiple">
                   <?php
                     try {
@@ -104,9 +112,12 @@ if (!empty($messages)) {
                 </select>
               </label><br>
         
-              <label <?php if ($errors['biography']) {print 'class="error"';} ?>>
+              <label >
                 Биография:<br>
-                <textarea name="biography" value="<?php print $values['biography'] ?>"></textarea>
+                <textarea 
+                  <?php if ($errors['biography']) {print 'class="error"';} ?>
+                  name="biography" value="<?php print $values['biography'] ?>">
+                </textarea>
               </label><br>
         
               Согласие c лицензионным соглашением:<br>
