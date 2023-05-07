@@ -162,13 +162,13 @@ else {
       $stmt = $db->prepare(
         "INSERT INTO Person ".
         "(full_name, _login, password_hash, email, birth_year, is_male, limbs_amount, biography) ".
-        "VALUES (:full_name, :email, :birth_year, :is_male, :limbs_amount, :biography);"
+        "VALUES (:full_name, :_login, :password_hash, :email, :birth_year, :is_male, :limbs_amount, :biography);"
         );
       $stmtErr =  $stmt -> execute(
             [
             'full_name' => $_POST['full_name'],
             '_login' => $login,
-            'password_hash' => password_hash($pass, "md5"),
+            'password_hash' => password_hash($pass, PASSWORD_BCRYPT),
             'email' => $_POST['email'] , 
             'birth_year' => $_POST['birth_year'], 
             'is_male' => $_POST['is_male'], 
