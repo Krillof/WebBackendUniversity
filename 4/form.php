@@ -114,9 +114,6 @@ if (!empty($messages)) {
         
               <label >
                 Биография:
-                <?php 
-                var_dump($values['biography']);
-                ?>
                 <br>
                 <textarea 
                   <?php if ($errors['biography']) {print 'class="error"';} ?>
