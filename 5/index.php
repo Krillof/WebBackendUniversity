@@ -5,9 +5,23 @@
  * пароль и логин генерируются автоматически при первоначальной отправке формы.
  */
 
+include_once 'includes.php';
+
+$columns = array();
+$columns[] = 'full_name';
+$columns[] = 'email';
+$columns[] = 'birth_year';
+$columns[] = 'limbs_amount';
+$columns[] = 'is_male';
+$columns[] = 'biography';
+$columns[] = 'powers';
+
+
 // Отправляем браузеру правильную кодировку,
 // файл index.php должен быть в кодировке UTF-8 без BOM.
 header('Content-Type: text/html; charset=UTF-8');
+
+
 
 // В суперглобальном массиве $_SERVER PHP сохраняет некторые заголовки запроса HTTP
 // и другие сведения о клиненте и сервере, например метод текущего запроса $_SERVER['REQUEST_METHOD'].
@@ -35,24 +49,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
   // Складываем признак ошибок в массив.
   $errors = array();
-  $errors['fio'] = !empty($_COOKIE['fio_error']);
 
-  // TODO: аналогично все поля.
+  foreach ($columns as $column)
+    $errors[$column] = !empty($_COOKIE[$column.'_error']);
 
   // Выдаем сообщения об ошибках.
-  if (!empty($errors['fio'])) {
-    // Удаляем куку, указывая время устаревания в прошлом.
-    setcookie('fio_error', '', 100000);
-    // Выводим сообщение.
-    $messages[] = '<div class="error">Заполните имя.</div>';
-  }
-  // TODO: тут выдать сообщения об ошибках в других полях.
+  foreach ($columns as $column) 
+    if ($errors[$column]) {
+     // Выводим сообщение.
+     $messages[] = '<div class="error">'.$_COOKIE[$column.'_error'].'</div>';
+     // Удаляем куку, указывая время устаревания в прошлом.
+     setcookie($column.'_error', '', 100000);
+    }
 
   // Складываем предыдущие значения полей в массив, если есть.
   // При этом санитизуем все данные для безопасного отображения в браузере.
   $values = array();
-  $values['fio'] = empty($_COOKIE['fio_value']) ? '' : strip_tags($_COOKIE['fio_value']);
-  // TODO: аналогично все поля.
+  foreach ($columns as $column)
+    $values[$column] = empty($_COOKIE[$column.'_value']) ? '' : json_decode($_COOKIE[$column.'_value']);
 
   // Если нет предыдущих ошибок ввода, есть кука сессии, начали сессию и
   // ранее в сессию записан факт успешного логина.
@@ -73,20 +87,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 else {
   // Проверяем ошибки.
   $errors = FALSE;
-  if (empty($_POST['fio'])) {
+
+  if (empty($_POST['full_name'])) {
     // Выдаем куку на день с флажком об ошибке в поле fio.
-    setcookie('fio_error', '1', time() + 24 * 60 * 60);
+    setcookie('full_name_error', 'Enter your name, please', time() + 24 * 60 * 60);
     $errors = TRUE;
   }
-  else {
-    // Сохраняем ранее введенное в форму значение на месяц.
-    setcookie('fio_value', $_POST['fio'], time() + 30 * 24 * 60 * 60);
+
+  if (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+    if (empty($_POST['email'])) 
+      setcookie('email_error', 'Mail is not set', time() + 24 * 60 * 60);
+    else
+      setcookie('email_error', 'Mail is invalid', time() + 24 * 60 * 60);
+    $errors = TRUE;
   }
 
-// *************
-// TODO: тут необходимо проверить правильность заполнения всех остальных полей.
-// Сохранить в Cookie признаки ошибок и значения полей.
-// *************
+  if (!isset($_POST['birth_year'])) {
+    setcookie('birth_year_error', 'Year is not set', time() + 24 * 60 * 60);
+    $errors = TRUE;
+  }
+
+  if (!isset($_POST['limbs_amount'])) {
+    setcookie('limbs_amount_error', 'Limbs number is not set', time() + 24 * 60 * 60);
+    $errors = TRUE;
+  }
+
+  if (!isset($_POST['is_male']) || ($_POST['is_male']!=0 && $_POST['is_male']!=1)) {
+    if (!isset($_POST['is_male']))
+      setcookie('is_male_error', 'Gender is not set', time() + 24 * 60 * 60);
+    else
+      setcookie('is_male_error', 'Gender is invalid', time() + 24 * 60 * 60);
+    $errors = TRUE;
+  }
+
+  if (!isset($_POST['powers'])) {
+    setcookie('powers_error', 'You have to choose minimum one power', time() + 24 * 60 * 60);
+    $errors = TRUE;
+  }
+
+
+  // Сохраняем ранее введенное в форму значение на месяц.
+  foreach ($columns as $column)
+    setcookie($column.'_value', json_encode($_POST[$column]), time() + 30 * 24 * 60 * 60);
+  
+
 
   if ($errors) {
     // При наличии ошибок перезагружаем страницу и завершаем работу скрипта.
@@ -95,8 +139,8 @@ else {
   }
   else {
     // Удаляем Cookies с признаками ошибок.
-    setcookie('fio_error', '', 100000);
-    // TODO: тут необходимо удалить остальные Cookies.
+    foreach ($columns as $column)
+      setcookie($column.'_error', '', 100000);
   }
 
   // Проверяем меняются ли ранее сохраненные данные или отправляются новые.
@@ -107,15 +151,48 @@ else {
   }
   else {
     // Генерируем уникальный логин и пароль.
-    // TODO: сделать механизм генерации, например функциями rand(), uniquid(), md5(), substr().
-    $login = '123';
-    $pass = '123';
+    $login = random_bytes(15);
+    $pass = random_bytes(15);
     // Сохраняем в Cookies.
     setcookie('login', $login);
     setcookie('pass', $pass);
 
-    // TODO: Сохранение данных формы, логина и хеш md5() пароля в базу данных.
-    // ...
+    // Сохраняем в бд
+    try {
+      $stmt = $db->prepare(
+        "INSERT INTO Person ".
+        "(full_name, _login, password_hash, email, birth_year, is_male, limbs_amount, biography) ".
+        "VALUES (:full_name, :email, :birth_year, :is_male, :limbs_amount, :biography);"
+        );
+      $stmtErr =  $stmt -> execute(
+            [
+            'full_name' => $_POST['full_name'],
+            '_login' => $login,
+            'password_hash' => password_hash($pass, "md5"),
+            'email' => $_POST['email'] , 
+            'birth_year' => $_POST['birth_year'], 
+            'is_male' => $_POST['is_male'], 
+            'limbs_amount' => $_POST['limbs_amount'], 
+            'biography' => $_POST['biography']
+            ]
+        );
+      if (!$stmtErr) 
+        send_error_and_exit("Some server issue","500");
+      $strId = $db->lastInsertId();
+      
+      foreach ($_POST['powers'] as $item) {
+        $stmt = $db->prepare(
+          "INSERT INTO Person_Ability (person_id, ability_id) VALUES (:p, :a);"
+        );
+        $stmtErr = $stmt->execute(['p' => intval($strId), 'a' => $item]);
+        if (!$stmtErr)
+          send_error_and_exit("Some server issue","500");
+      }
+      
+    }
+    catch(PDOException $e){
+        send_error_and_exit("Some server issue","500");
+    }
   }
 
   // Сохраняем куку с признаком успешного сохранения.

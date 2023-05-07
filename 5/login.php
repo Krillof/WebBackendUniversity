@@ -1,5 +1,7 @@
 <?php
 
+
+include_once 'includes.php';
 /**
  * Файл login.php для не авторизованного пользователя выводит форму логина.
  * При отправке формы проверяет логин/пароль и создает сессию,
@@ -42,12 +44,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 else {
 
   // TODO: Проверть есть ли такой логин и пароль в базе данных.
+  $no_such_user = True;
+  $uid=-1;
+  try {
+    if ($result = $db->query(
+      "SELECT * FROM Person WHERE _login='".$_POST['login']."' && password_hash='".password_hash($_POST['pass'], "md5")."';";
+    )){
+      $no_such_user = False;
+      $person = $result->fetch_object();
+      $uid = $person->id;
+    }
+  }
+  catch(PDOException $e){
+      send_error_and_exit("Some server issue","500");
+  }
   // Выдать сообщение об ошибках.
-
-  // Если все ок, то авторизуем пользователя.
-  $_SESSION['login'] = $_POST['login'];
-  // Записываем ID пользователя.
-  $_SESSION['uid'] = 123;
+  if ($no_such_user){
+    $_SESSION['is_error']=1;
+    $_SESSION['error_message']="No such login or password";
+  } else {
+    $_SESSION['is_error']=0;
+    $_SESSION['error_message']="";
+    // Если все ок, то авторизуем пользователя.
+    $_SESSION['login'] = $_POST['login'];
+    // Записываем ID пользователя.
+    $_SESSION['uid'] = $uid; //TODO
+  }
 
   // Делаем перенаправление.
   header('Location: ./');
