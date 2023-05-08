@@ -48,7 +48,7 @@ else {
   $uid=-1;
   try {
     if ($result = $db->query(
-      "SELECT * FROM Person WHERE _login='".$_POST['login']."' && password_hash='".password_hash($_POST['pass'], "md5")."';";
+      "SELECT * FROM Person WHERE _login='".$_POST['login']."' && password_hash='".password_hash($_POST['pass'], "md5")."';"
     )){
       $no_such_user = False;
       $person = $result->fetch_object();
