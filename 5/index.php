@@ -188,12 +188,10 @@ else {
       send_error_and_exit($stmt->errorInfo()[0].'   '.$stmt->errorInfo()[1].'   '.$stmt->errorInfo()[2],"500");
 
 
-    $stmt = $db->prepare(
+    $deleted_count = $db->exec(
         "DELETE FROM Person_Ability ".
-        "WHERE person_id=:id;"
+        "WHERE person_id=".$_SESSION['uid'].";"
     );
-    $stmt->execute(['id' => $_SESSION['uid']]);
-
 
 
     foreach ($_POST['powers'] as $item) {
