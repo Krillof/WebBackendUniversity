@@ -5,6 +5,10 @@
     .error {
       border: 2px solid red;
     }
+
+    td{
+      margin: 10px;
+    }
     </style>
   </head>
   <body>

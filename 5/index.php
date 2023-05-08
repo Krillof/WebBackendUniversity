@@ -89,7 +89,7 @@ else {
   $errors = FALSE;
 
   if (empty($_POST['full_name'])) {
-    // Выдаем куку на день с флажком об ошибке в поле fio.
+    // Выдаем куку на день с флажком об ошибке в поле full_name.
     setcookie('full_name_error', 'Enter your name, please', time() + 24 * 60 * 60);
     $errors = TRUE;
   }
@@ -157,14 +157,17 @@ else {
     setcookie('login', $login);
     setcookie('pass', $pass);
 
+
+
     // Сохраняем в бд
     try {
+
       $stmt = $db->prepare(
         "INSERT INTO Person ".
         "(full_name, _login, password_hash, email, birth_year, is_male, limbs_amount, biography) ".
         "VALUES (:full_name, :_login, :password_hash, :email, :birth_year, :is_male, :limbs_amount, :biography);"
         );
-      $stmtErr =  $stmt -> execute(
+      $stmtErr = $stmt -> execute(
             [
             'full_name' => $_POST['full_name'],
             '_login' => $login,
@@ -177,7 +180,7 @@ else {
             ]
         );
       if (!$stmtErr) 
-        send_error_and_exit("Some server issue","500");
+        send_error_and_exit($stmt->errorInfo()[2],"500");
       $strId = $db->lastInsertId();
       
       foreach ($_POST['powers'] as $item) {
@@ -186,12 +189,12 @@ else {
         );
         $stmtErr = $stmt->execute(['p' => intval($strId), 'a' => $item]);
         if (!$stmtErr)
-          send_error_and_exit("Some server issue","500");
+          send_error_and_exit("Problem with giving ability to person","500");
       }
       
     }
     catch(PDOException $e){
-        send_error_and_exit("Some server issue","500");
+        send_error_and_exit($e->message,"500");
     }
   }
 
