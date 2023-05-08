@@ -47,6 +47,7 @@ else {
       "SELECT * FROM Person WHERE _login='".$_POST['login']."' && password_hash='".my_password_hash($_POST['pass'])."';"
     )){
       $no_such_user = False;
+      var_dump($result->fetchAll());//delete
       $person = $result->fetchAll()[0];
       $uid = $person['id'];
       send_error_and_exit("login_check: ".$uid, "500"); //delete
