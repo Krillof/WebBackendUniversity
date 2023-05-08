@@ -29,6 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   // Массив для временного хранения сообщений пользователю.
   $messages = array();
 
+  $is_changing_data = empty($errors) && !empty($_COOKIE[session_name()]) &&
+              session_start() && !empty($_SESSION['login']);
+
   // В суперглобальном массиве $_COOKIE PHP хранит все имена и значения куки текущего запроса.
   // Выдаем сообщение об успешном сохранении.
   if (!empty($_COOKIE['save'])) {
@@ -44,6 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       strip_tags($_COOKIE['login']),
       strip_tags($_COOKIE['pass']));
     
+  } else if ($is_changing_data){
+    $messages[] = 'Изменение данных:';
   } else {
     $messages[] = '<a href="login.php">ВХОД</a>';
   }
@@ -166,7 +171,7 @@ else {
       "UPDATE Person ".
       "SET full_name=:full_name, email=:email, birth_year=:birth_year, ".
       "is_male=:is_male, limbs_amount=:limbs_amount, biography=:biography ".
-      "WHERE _login='".$_POST['login']."' && password_hash='".my_password_hash($_POST['pass'])."';"
+      "WHERE _login='".$_SESSION['login']."' && password_hash='".my_password_hash($_SESSION['pass'])."';"
       );
     $stmtErr = $stmt -> execute(
           [
@@ -182,12 +187,11 @@ else {
       send_error_and_exit($stmt->errorInfo()[0].'   '.$stmt->errorInfo()[1].'   '.$stmt->errorInfo()[2],"500");
 
 
-
     $stmt = $db->prepare(
         "DELETE FROM Person_Ability ".
-        "WHERE _login='".$_POST['login']."' && password_hash='".my_password_hash($_POST['pass'])."';"
+        "WHERE person_id=:id;"
     );
-    $stmt->execute();
+    $stmt->execute(['id' => $_SESSION['uid']]);
 
 
 
