@@ -50,8 +50,8 @@ else {
       "SELECT * FROM Person WHERE _login='".$_POST['login']."' && password_hash='".my_password_hash($_POST['pass'])."';"
     )){
       $no_such_user = False;
-      $person = $result->fetch_object();
-      $uid = $person->id;
+      $person = $result->fetch_all();
+      $uid = $person['id'];
     }
   }
   catch(PDOException $e){
