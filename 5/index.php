@@ -192,7 +192,7 @@ else {
         "DELETE FROM Person_Ability ".
         "WHERE person_id=".$_SESSION['uid'].";"
     );
-
+    send_error_and_exit("deleted: ".$deleted_count, "500");
 
     foreach ($_POST['powers'] as $item) {
       $stmt = $db->prepare(
