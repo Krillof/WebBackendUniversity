@@ -180,7 +180,7 @@ else {
             ]
         );
       if (!$stmtErr) 
-        send_error_and_exit($stmt->errorInfo()[2],"500");
+        send_error_and_exit(strlen($login).'  '.$stmt->errorInfo()[0].'   '.$stmt->errorInfo()[1].'   '.$stmt->errorInfo()[2],"500");
       $strId = $db->lastInsertId();
       
       foreach ($_POST['powers'] as $item) {
