@@ -49,7 +49,7 @@ else {
     );
     $stmt->execute(['lgn' => $_POST['login'], 'pass_hash' => my_password_hash($_POST['pass'])]);
     $person = $stmt->fetch();
-    send_error_and_exit("person_check: ".$person, "500"); //delete
+    send_error_and_exit("person_check: ".var_dump($person), "500"); //delete
     $uid = $person['id'];
     send_error_and_exit("login_check: ".$uid, "500"); //delete
   }
