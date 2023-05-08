@@ -76,13 +76,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       if ($result = $db->query(
         "SELECT * FROM Person WHERE _login='".$_POST['login']."' && password_hash='".password_hash($_POST['pass'], PASSWORD_BCRYPT)."';"
       )){
-        $obj = $result->fetch_all(MYSQLI_ASSOC);
+        $obj = $result->fetchAll()[0];
         foreach ($columns as $column)
           $values[$column] = empty($obj[$column]) ? '' : $obj[$column];
       }
     }
     catch(PDOException $e){
-        send_error_and_exit("Some server issue","500");
+        send_error_and_exit($e->message,"500");
     }
 
     printf('Вход с логином %s, uid %d', $_SESSION['login'], $_SESSION['uid']);

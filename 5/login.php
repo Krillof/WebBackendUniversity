@@ -50,12 +50,12 @@ else {
       "SELECT * FROM Person WHERE _login='".$_POST['login']."' && password_hash='".my_password_hash($_POST['pass'])."';"
     )){
       $no_such_user = False;
-      $person = $result->fetch_all(MYSQLI_ASSOC);
+      $person = $result->fetchAll()[0];
       $uid = $person['id'];
     }
   }
   catch(PDOException $e){
-      send_error_and_exit("Some server issue","500");
+      send_error_and_exit($e->message,"500");
   }
   // Выдать сообщение об ошибках.
   if ($no_such_user){
