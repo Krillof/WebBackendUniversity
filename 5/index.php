@@ -63,20 +63,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
      setcookie($column.'_error', '', 100000);
     }
 
-  // Складываем предыдущие значения полей в массив, если есть.
-  // При этом санитизуем все данные для безопасного отображения в браузере.
+  
   $values = array();
-  foreach ($columns as $column)
-    $values[$column] = empty($_COOKIE[$column.'_value']) ? '' : json_decode($_COOKIE[$column.'_value']);
+  
 
   // Если нет предыдущих ошибок ввода, есть кука сессии, начали сессию и
   // ранее в сессию записан факт успешного логина.
   if (empty($errors) && !empty($_COOKIE[session_name()]) &&
       session_start() && !empty($_SESSION['login'])) {
-    // TODO: загрузить данные пользователя из БД
-    // и заполнить переменную $values,
-    // предварительно санитизовав.
+
+    try {
+      if ($result = $db->query(
+        "SELECT * FROM Person WHERE _login='".$_POST['login']."' && password_hash='".password_hash($_POST['pass'], PASSWORD_BCRYPT)."';"
+      )){
+        $obj = $result->fetch_all();
+        foreach ($columns as $column)
+          $values[$column] = empty($obj[$column]) ? '' : $obj[$column];
+      }
+    }
+    catch(PDOException $e){
+        send_error_and_exit("Some server issue","500");
+    }
+
     printf('Вход с логином %s, uid %d', $_SESSION['login'], $_SESSION['uid']);
+  } else {
+    // Складываем предыдущие значения полей в массив, если есть.
+    // При этом санитизуем все данные для безопасного отображения в браузере.
+    foreach ($columns as $column)
+      $values[$column] = empty($_COOKIE[$column.'_value']) ? '' : json_decode($_COOKIE[$column.'_value']);
   }
 
   // Включаем содержимое файла form.php.
@@ -147,8 +161,44 @@ else {
   // Проверяем меняются ли ранее сохраненные данные или отправляются новые.
   if (!empty($_COOKIE[session_name()]) &&
       session_start() && !empty($_SESSION['login'])) {
-    // TODO: перезаписать данные в БД новыми данными,
-    // кроме логина и пароля.
+
+    $stmt = $db->prepare(
+      "UPDATE Person ".
+      "SET full_name=:full_name, email=:email, birth_year=:birth_year, ".
+      "is_male=:is_male, limbs_amount=:limbs_amount, biography=:biography ".
+      "WHERE _login='".$_POST['login']."' && password_hash='".my_password_hash($_POST['pass'])."';"
+      );
+    $stmtErr = $stmt -> execute(
+          [
+          'full_name' => $_POST['full_name'],
+          'email' => $_POST['email'] , 
+          'birth_year' => $_POST['birth_year'], 
+          'is_male' => $_POST['is_male'], 
+          'limbs_amount' => $_POST['limbs_amount'], 
+          'biography' => $_POST['biography']
+          ]
+      );
+    if (!$stmtErr) 
+      send_error_and_exit($stmt->errorInfo()[0].'   '.$stmt->errorInfo()[1].'   '.$stmt->errorInfo()[2],"500");
+
+
+
+    $stmt = $db->prepare(
+        "DELETE FROM Person_Ability ".
+        "WHERE _login='".$_POST['login']."' && password_hash='".my_password_hash($_POST['pass'])."';"
+    );
+    $stmt->execute();
+
+
+
+    foreach ($_POST['powers'] as $item) {
+      $stmt = $db->prepare(
+        "INSERT INTO Person_Ability (person_id, ability_id) VALUES (:p, :a);"
+      );
+      $stmtErr = $stmt->execute(['p' => intval($strId), 'a' => $item]);
+      if (!$stmtErr)
+        send_error_and_exit("Problem with giving ability to person","500");
+    }
   }
   else {
     // Генерируем уникальный логин и пароль.
@@ -172,7 +222,7 @@ else {
             [
             'full_name' => $_POST['full_name'],
             '_login' => $login,
-            'password_hash' => password_hash($pass, PASSWORD_BCRYPT),
+            'password_hash' => my_password_hash($_POST['pass']),
             'email' => $_POST['email'] , 
             'birth_year' => $_POST['birth_year'], 
             'is_male' => $_POST['is_male'], 

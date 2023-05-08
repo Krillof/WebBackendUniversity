@@ -15,6 +15,10 @@ function generate_random_string($length) {
     return $str;
 }
 
+function my_password_hash($pass){
+    return password_hash($pass, PASSWORD_BCRYPT)
+}
+
 $user = 'u53304';
 $pass = '1449484';
 $db = new PDO('mysql:host=localhost;dbname='.$user, $user, $pass, [PDO::ATTR_PERSISTENT => true]);

@@ -43,12 +43,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 // Иначе, если запрос был методом POST, т.е. нужно сделать авторизацию с записью логина в сессию.
 else {
 
-  // TODO: Проверть есть ли такой логин и пароль в базе данных.
   $no_such_user = True;
   $uid=-1;
   try {
     if ($result = $db->query(
-      "SELECT * FROM Person WHERE _login='".$_POST['login']."' && password_hash='".password_hash($_POST['pass'], "md5")."';"
+      "SELECT * FROM Person WHERE _login='".$_POST['login']."' && password_hash='".my_password_hash($_POST['pass'])."';"
     )){
       $no_such_user = False;
       $person = $result->fetch_object();
