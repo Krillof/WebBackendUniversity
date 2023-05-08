@@ -50,7 +50,7 @@ else {
       "SELECT * FROM Person WHERE _login='".$_POST['login']."' && password_hash='".my_password_hash($_POST['pass'])."';"
     )){
       $no_such_user = False;
-      $person = $result->fetch_all();
+      $person = $result->fetch_all(MYSQLI_ASSOC);
       $uid = $person['id'];
     }
   }

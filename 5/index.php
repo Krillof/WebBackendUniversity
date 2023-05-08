@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       if ($result = $db->query(
         "SELECT * FROM Person WHERE _login='".$_POST['login']."' && password_hash='".password_hash($_POST['pass'], PASSWORD_BCRYPT)."';"
       )){
-        $obj = $result->fetch_all();
+        $obj = $result->fetch_all(MYSQLI_ASSOC);
         foreach ($columns as $column)
           $values[$column] = empty($obj[$column]) ? '' : $obj[$column];
       }
