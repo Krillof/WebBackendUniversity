@@ -16,7 +16,7 @@ function generate_random_string($length) {
 }
 
 function my_password_hash($pass){
-    return password_hash($pass, PASSWORD_BCRYPT)
+    return password_hash($pass, PASSWORD_BCRYPT);
 }
 
 $user = 'u53304';
