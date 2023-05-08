@@ -151,7 +151,7 @@ else {
   }
   else {
     // Генерируем уникальный логин и пароль.
-    $login = random_bytes(10);
+    $login = random_bytes(15);
     $pass = random_bytes(15);
     // Сохраняем в Cookies.
     setcookie('login', $login);
