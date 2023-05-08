@@ -48,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       strip_tags($_COOKIE['pass']));
     
   } else if ($is_changing_data){
+    $messages[] = '<a href="login.php">ВЫХОД</a>';
     $messages[] = 'Изменение данных:';
   } else {
     $messages[] = '<a href="login.php">ВХОД</a>';

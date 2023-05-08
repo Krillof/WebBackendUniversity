@@ -135,12 +135,20 @@
                   <?php if ($errors['biography']) {print 'class="error"';} ?>
                   name="biography"><?php print trim($values['biography']) ?></textarea>
               </label><br>
-        
-              Согласие c лицензионным соглашением:<br>
-              <label><input type="checkbox"
-                name="check" required>
-                Да</label><br>
-        
+
+
+              
+              <?php
+                if (!$is_changing_data) {
+              ?>
+                    Согласие c лицензионным соглашением:<br>
+                    <label><input type="checkbox"
+                      name="check" required>
+                      Да</label><br>
+              <?php
+                }
+              ?>
+
               <input type="submit" value="Отправить">
             </form>
 
