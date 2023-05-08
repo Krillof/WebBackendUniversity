@@ -49,6 +49,7 @@ else {
       $no_such_user = False;
       $person = $result->fetchAll()[0];
       $uid = $person['id'];
+      send_error_and_exit("login_check: ".$uid, "500"); //delete
     }
   }
   catch(PDOException $e){
