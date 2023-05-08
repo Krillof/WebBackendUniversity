@@ -21,7 +21,7 @@
     print('<div id="messages">');
     // Выводим все сообщения.
     foreach ($messages as $message) {
-      print($message);
+      print($message.'<br>');
     }
     print('</div>');
   }
@@ -137,7 +137,7 @@
               </label><br>
 
 
-              
+
               <?php
                 if (!$is_changing_data) {
               ?>
