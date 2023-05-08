@@ -48,6 +48,7 @@ else {
       "SELECT id FROM Person WHERE _login=:lgn && password_hash=:pass_hash;"
     );
     $stmt->execute(['lgn' => $_POST['login'], 'pass_hash' => my_password_hash($_POST['pass'])]);
+    send_error_and_exit("pass_check: ".my_password_hash($_POST['pass']), "500"); //delete
     $person = $stmt->fetch();
     send_error_and_exit("person_check: ".var_dump($person), "500"); //delete
     $uid = $person['id'];
