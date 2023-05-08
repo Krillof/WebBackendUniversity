@@ -172,7 +172,7 @@ else {
       "UPDATE Person ".
       "SET full_name=:full_name, email=:email, birth_year=:birth_year, ".
       "is_male=:is_male, limbs_amount=:limbs_amount, biography=:biography ".
-      "WHERE _login='".$_SESSION['login']."' && password_hash='".my_password_hash($_SESSION['pass'])."';"
+      "WHERE _login='".$_SESSION['login']."';"
       );
     $stmtErr = $stmt -> execute(
           [
@@ -200,7 +200,7 @@ else {
       $stmt = $db->prepare(
         "INSERT INTO Person_Ability (person_id, ability_id) VALUES (:p, :a);"
       );
-      $stmtErr = $stmt->execute(['p' => intval($strId), 'a' => $item]);
+      $stmtErr = $stmt->execute(['p' => intval($_SESSION['uid']), 'a' => $item]);
       if (!$stmtErr)
         send_error_and_exit("Problem with giving ability to person","500");
     }
