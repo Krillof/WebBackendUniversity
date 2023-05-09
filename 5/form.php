@@ -8,6 +8,7 @@
 
     td{
       margin: 10px;
+      border: 2px solid black;
     }
     </style>
   </head>
@@ -162,7 +163,7 @@
                             $abilities = $abilities.'     '.$a['_name'];
                           }
                         }
-                        print '<tr><td>'.$person['full_name'].'</td><td>'.$abilities.'</td></tr>';
+                        print '<tr><td>'.$person['full_name'].'</td><td>'.$person['email'].'</td><td>'.$person['birth_year'].'</td><td>'.$person['is_male'].'</td><td>'.$person['limbs_amount'].'</td><td>'.$person['biography'].'</td><td>'.$abilities.'</td></tr>';
                       }
                     } catch(PDOException $e){
                       send_error_and_exit("Db connection error", "500");
