@@ -44,8 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     
     $messages[] = sprintf('Вы можете <a href="login.php">войти</a> с логином <strong>%s</strong>
       и паролем <strong>%s</strong> для изменения данных.',
-      strip_tags($_COOKIE['login']),
-      strip_tags($_COOKIE['pass']));
     
   } else if ($is_changing_data){
     $messages[] = '<a href="login.php">ВЫХОД</a>';
