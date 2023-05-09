@@ -224,7 +224,7 @@ else {
             [
             'full_name' => $_POST['full_name'],
             '_login' => $login,
-            'password_hash' => my_password_hash($_POST['pass']),
+            'password_hash' => my_password_hash($pass),
             'email' => $_POST['email'] , 
             'birth_year' => $_POST['birth_year'], 
             'is_male' => $_POST['is_male'], 
