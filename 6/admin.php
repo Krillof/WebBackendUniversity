@@ -52,6 +52,8 @@ foreach (
 print '</table>';
 print '<br>';
 
+print '<table>'
+
 try {
   foreach ($db->query("SELECT * FROM Person;") as $person){
     $abilities = '';
@@ -65,6 +67,8 @@ try {
 } catch(PDOException $e){
   send_error_and_exit("Db connection error", "500");
 }
+
+print '</table>'
 
 ?>
 
