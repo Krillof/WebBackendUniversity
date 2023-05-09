@@ -19,6 +19,10 @@ function my_password_hash($pass){
     return password_hash($pass, PASSWORD_BCRYPT);
 }
 
+function my_verify_password($pass, $hash){
+    return password_verify($pass, $hash);
+}
+
 $user = 'u53304';
 $pass = '1449484';
 $db = new PDO('mysql:host=localhost;dbname='.$user, $user, $pass, [PDO::ATTR_PERSISTENT => true]);

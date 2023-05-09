@@ -30,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 ?>
 
 <form action="" method="post">
-  <input name="login" />
-  <input name="pass" />
+  <input name="login" placeholder="login" />
+  <input name="pass" placeholder="password" />
   <input type="submit" value="Войти" />
 </form>
 
@@ -45,14 +45,16 @@ else {
   try {
 
     $stmt = $db->prepare(
-      "SELECT id FROM Person WHERE _login=:lgn && password_hash=:pass_hash;"
+      "SELECT id, password_hash FROM Person WHERE _login=:lgn;"
     );
-    $stmt->execute(['lgn' => $_POST['login'], 'pass_hash' => my_password_hash($_POST['pass'])]);
-    send_error_and_exit("pass_check: ".my_password_hash($_POST['pass']), "500"); //delete
-    $person = $stmt->fetch();
-    send_error_and_exit("person_check: ".var_dump($person), "500"); //delete
-    $uid = $person['id'];
-    send_error_and_exit("login_check: ".$uid, "500"); //delete
+    $stmt->execute(['lgn' => $_POST['login']]);
+    
+    if ($person = $stmt->fetch()){
+      if (my_verify_password($_POST['pass'], $person['password_hash'])){
+        $no_such_user = False;
+        $uid = $person['id'];
+      }
+    }
   }
   catch(PDOException $e){
       send_error_and_exit($e->message,"500");
@@ -60,7 +62,7 @@ else {
   // Выдать сообщение об ошибках.
   if ($no_such_user){
     $_SESSION['is_error']=1;
-    $_SESSION['error_message']="No such login or password";
+    $_SESSION['error_message']="Нет такого логина или пароля";
   } else {
     $_SESSION['is_error']=0;
     $_SESSION['error_message']="";
