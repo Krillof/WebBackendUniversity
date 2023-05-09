@@ -53,7 +53,7 @@ print '</table>';
 print '<br>';
 
 print '<table>';
-
+print '<tr><th>Имя</th><th>Почта</th><th>Год рождения</th><th>Мужчина?</th><th>Число конечностей</th><th>Биография</th><th>Способности</th></tr>';
 try {
   foreach ($db->query("SELECT * FROM Person;") as $person){
     $abilities = '';
