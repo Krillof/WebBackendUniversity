@@ -49,9 +49,10 @@ else {
     );
     $stmt->execute(['lgn' => $_POST['login']]);
     
-    send_error_and_exit(var_dump($stmt->fetch()), "500");
+    
 
     if ($person = $stmt->fetch()){
+      send_error_and_exit(var_dump(my_verify_password($_POST['pass'], $person['password_hash'])), "500");
       if (my_verify_password($_POST['pass'], $person['password_hash'])){
         $no_such_user = False;
         $uid = $person['id'];
@@ -61,6 +62,7 @@ else {
   catch(PDOException $e){
       send_error_and_exit($e->message,"500");
   }
+
   // Выдать сообщение об ошибках.
   if ($no_such_user){
     $_SESSION['is_error']=1;
