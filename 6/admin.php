@@ -52,7 +52,7 @@ foreach (
 print '</table>';
 print '<br>';
 
-print '<table>'
+print '<table>';
 
 try {
   foreach ($db->query("SELECT * FROM Person;") as $person){
@@ -68,7 +68,7 @@ try {
   send_error_and_exit("Db connection error", "500");
 }
 
-print '</table>'
+print '</table>';
 
 ?>
 
