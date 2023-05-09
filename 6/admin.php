@@ -1,3 +1,14 @@
+<html>
+<head>
+  <style>
+    td{
+      margin: 10px;
+      border: 2px solid black;
+    }
+    </style>
+</head>
+<body>
+
 <?php
 include_once 'includes.php';
 /**
@@ -54,3 +65,8 @@ try {
 } catch(PDOException $e){
   send_error_and_exit("Db connection error", "500");
 }
+
+?>
+
+<body>
+<html>
