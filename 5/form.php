@@ -160,7 +160,7 @@
                         $abilities = '';
                         foreach ($db->query('SELECT * FROM Person_Ability WHERE person_id='.intval($person['id']).';') as $pa){
                           foreach ($db->query('SELECT _name FROM Ability WHERE id='.intval($pa['ability_id']).';') as $a){
-                            $abilities = $abilities.$a['_name'.', '];
+                            $abilities = $abilities.$a['_name'].', ';
                           }
                         }
                         print '<tr><td>'.$person['full_name'].'</td><td>'.$person['email'].'</td><td>'.$person['birth_year'].'</td><td>'.$person['is_male'].'</td><td>'.$person['limbs_amount'].'</td><td>'.$person['biography'].'</td><td>'.$abilities.'</td></tr>';
