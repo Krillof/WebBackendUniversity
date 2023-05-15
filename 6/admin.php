@@ -61,8 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           $abilities = $abilities.$a['_name'].', ';
         }
       }
-      $delete_user_button='<form action="admin.php" method="POST"> <input hidden name="type" type="text" value="delete"/> <input hidden name="user" type="text" value="'.$person['id'].'"/> <button> DELETE </button> </form>';
-      $change_user_button='<form action="admin.php" method="POST"> <input hidden name="type" type="text" value="change"/> <input hidden name="user" type="text" value="'.$person['id'].'"/> <button> CHANGE </button> </form>';
+      $delete_user_button='<td><form action="admin.php" method="POST"> <input hidden name="type" type="text" value="delete"/> <input hidden name="user" type="text" value="'.$person['id'].'"/> <button> DELETE </button> </form></td>';
+      $change_user_button='<td><form action="admin.php" method="POST"> <input hidden name="type" type="text" value="change"/> <input hidden name="user" type="text" value="'.$person['id'].'"/> <button> CHANGE </button> </form></td>';
       $current_user_info='<td>'.$person['full_name'].'</td><td>'.$person['email'].'</td><td>'.$person['birth_year'].'</td><td>'.$person['is_male'].'</td><td>'.$person['limbs_amount'].'</td><td>'.$person['biography'].'</td><td>'.$abilities.'</td>';
       print '<tr>'.$current_user_info.$delete_user_button.$change_user_button.'</tr>';
     }
