@@ -1,10 +1,10 @@
 <?php
 
 function is_admin(){
-    return empty($_SERVER['PHP_AUTH_USER']) ||
+    return !(empty($_SERVER['PHP_AUTH_USER']) ||
         empty($_SERVER['PHP_AUTH_PW']) ||
         $_SERVER['PHP_AUTH_USER'] != 'admin' ||
-        md5($_SERVER['PHP_AUTH_PW']) != md5('123');
+        md5($_SERVER['PHP_AUTH_PW']) != md5('123'));
 }
 
 function send_error_and_exit($error_message, $error_code="400"){
