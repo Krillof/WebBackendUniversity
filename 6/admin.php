@@ -19,58 +19,79 @@ include_once 'includes.php';
 // Пример HTTP-аутентификации.
 // PHP хранит логин и пароль в суперглобальном массиве $_SERVER.
 // Подробнее см. стр. 26 и 99 в учебном пособии Веб-программирование и веб-сервисы.
-if (empty($_SERVER['PHP_AUTH_USER']) ||
-    empty($_SERVER['PHP_AUTH_PW']) ||
-    $_SERVER['PHP_AUTH_USER'] != 'admin' ||
-    md5($_SERVER['PHP_AUTH_PW']) != md5('123')) {
+if (is_admin()) {
   header('HTTP/1.1 401 Unanthorized');
   header('WWW-Authenticate: Basic realm="My site"');
   print('<h1>401 Требуется авторизация</h1>');
   exit();
 }
 
-print '<h1> Панель администратора </h1>';
-print('Вы успешно авторизовались и видите защищенные паролем данные.');
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+?>
+<h1> Панель администратора </h1>
+Вы успешно авторизовались и видите защищенные паролем данные.
+<br>
 
-// *********
-// Здесь нужно прочитать отправленные ранее пользователями данные и вывести в таблицу.
-// Реализовать просмотр и удаление всех данных.
-// *********
+<h2>Статистика:</h2> <br>
 
-print '<br>';
+<table>
+<tr><th>Способность</th><th>Число тех, у кого она есть</th></tr>
 
-print '<h2>Статистика:</h2> <br>';
-print '<table>';
-print '<tr><th>Способность</th><th>Число тех, у кого она есть</th></tr>';
-foreach (
-  $db->query('SELECT a._name AS nm, count(*) AS amnt FROM Ability AS a'.
-  ' JOIN Person_Ability AS pa ON a.id=pa.ability_id'.
-  ' JOIN Person AS p ON p.id=pa.person_id'.
-  ' GROUP BY a._name;') as $row
-  ){
-    print '<tr> <td>'.$row['nm'].'</td> <td>'.$row['amnt'].'</td> </tr>';
-}
-print '</table>';
-print '<br>';
-print '<h2>Пользователи:</h2> <br>';
-print '<table>';
-print '<tr><th>Имя</th><th>Почта</th><th>Год рождения</th><th>Мужчина?</th><th>Число конечностей</th><th>Биография</th><th>Способности</th></tr>';
-try {
-  foreach ($db->query("SELECT * FROM Person;") as $person){
-    $abilities = '';
-    foreach ($db->query('SELECT * FROM Person_Ability WHERE person_id='.intval($person['id']).';') as $pa){
-      foreach ($db->query('SELECT _name FROM Ability WHERE id='.intval($pa['ability_id']).';') as $a){
-        $abilities = $abilities.$a['_name'].', ';
-      }
-    }
-    print '<tr><td>'.$person['full_name'].'</td><td>'.$person['email'].'</td><td>'.$person['birth_year'].'</td><td>'.$person['is_male'].'</td><td>'.$person['limbs_amount'].'</td><td>'.$person['biography'].'</td><td>'.$abilities.'</td></tr>';
+<?php
+  foreach (
+    $db->query('SELECT a._name AS nm, count(*) AS amnt FROM Ability AS a'.
+    ' JOIN Person_Ability AS pa ON a.id=pa.ability_id'.
+    ' JOIN Person AS p ON p.id=pa.person_id'.
+    ' GROUP BY a._name;') as $row
+    ){
+      print '<tr> <td>'.$row['nm'].'</td> <td>'.$row['amnt'].'</td> </tr>';
   }
-} catch(PDOException $e){
-  send_error_and_exit("Db connection error", "500");
+?>
+</table>
+<br>
+<h2>Пользователи:</h2> <br>
+<table>
+<tr><th>Имя</th><th>Почта</th><th>Год рождения</th><th>Мужчина?</th><th>Число конечностей</th><th>Биография</th><th>Способности</th></tr>
+<?php
+  try {
+    foreach ($db->query("SELECT * FROM Person;") as $person){
+      $abilities = '';
+      foreach ($db->query('SELECT * FROM Person_Ability WHERE person_id='.intval($person['id']).';') as $pa){
+        foreach ($db->query('SELECT _name FROM Ability WHERE id='.intval($pa['ability_id']).';') as $a){
+          $abilities = $abilities.$a['_name'].', ';
+        }
+      }
+      $delete_user_button='<form action="admin.php" method="POST"> <input hidden name="type" type="text" value="delete"/> <input hidden name="user" type="text" value="'.$person['id'].'"/> <button> DELETE </button> </form>'
+      $change_user_button='<form action="admin.php" method="POST"> <input name="type" type="text" value="change"/> <input hidden name="user" type="text" value="'.$person['id'].'"/> <button> CHANGE </button> </form>'
+      $current_user_info='<td>'.$person['full_name'].'</td><td>'.$person['email'].'</td><td>'.$person['birth_year'].'</td><td>'.$person['is_male'].'</td><td>'.$person['limbs_amount'].'</td><td>'.$person['biography'].'</td><td>'.$abilities.'</td>'
+      print '<tr>'.$current_user_info.$delete_user_button.$change_user_button.'</tr>';
+    }
+  } catch(PDOException $e) {
+    send_error_and_exit("Db connection error", "500");
+  }
+
+  print '</table>';
+
+
+} else {
+  // If request method was POST then
+
+  if (!empty($_POST['user'])) {
+    $id = $_POST['user'];
+    if ($_POST['type'] == 'delete'){
+      $db->query('DELETE FROM Person_Ability WHERE person_id='.$id.';');
+      $db->query('DELETE FROM Person WHERE id='.$id.';');
+    } else if ($_POST['type'] == 'change') {
+      $_SERVER['ADMIN_IS_LOOKING_AT_THIS_USER'] = $id;
+      header('Location: ./');
+    } else {
+      ?> 
+      <div class="error"> Unknown type </div>
+      <?php
+    }
+  }
+
 }
-
-print '</table>';
-
 ?>
 
 <body>
