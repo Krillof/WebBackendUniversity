@@ -50,6 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   } else if ($is_changing_data){
     $messages[] = '<a href="login.php">ВЫХОД</a>';
     $messages[] = 'Изменение данных:';
+  } else if (is_admin()){
+    $messages[] = 'Вы сейчас меняете пользователя в качестве админа.';
+    $messages[] = '<a href="admin.php">Вернуться на основную страницу админа</a>';
   } else {
     $messages[] = '<a href="login.php">ВХОД</a>';
   }
