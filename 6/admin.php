@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 <br>
 <h2>Пользователи:</h2> <br>
 <table>
-<tr><th>Имя</th><th>Почта</th><th>Год рождения</th><th>Мужчина?</th><th>Число конечностей</th><th>Биография</th><th>Способности</th></tr>
+<tr><th>ID</th><th>Имя</th><th>Почта</th><th>Год рождения</th><th>Мужчина?</th><th>Число конечностей</th><th>Биография</th><th>Способности</th></tr>
 <?php
   try {
     foreach ($db->query("SELECT * FROM Person;") as $person){
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       }
       $delete_user_button='<td><form action="admin.php" method="POST"> <input hidden name="type" type="text" value="delete"/> <input hidden name="user" type="text" value="'.$person['id'].'"/> <button> DELETE </button> </form></td>';
       $change_user_button='<td><form action="admin.php" method="POST"> <input hidden name="type" type="text" value="change"/> <input hidden name="user" type="text" value="'.$person['id'].'"/> <button> CHANGE </button> </form></td>';
-      $current_user_info='<td>'.$person['full_name'].'</td><td>'.$person['email'].'</td><td>'.$person['birth_year'].'</td><td>'.$person['is_male'].'</td><td>'.$person['limbs_amount'].'</td><td>'.$person['biography'].'</td><td>'.$abilities.'</td>';
+      $current_user_info='<td>'.$person['id'].'</td><td>'.$person['full_name'].'</td><td>'.$person['email'].'</td><td>'.$person['birth_year'].'</td><td>'.$person['is_male'].'</td><td>'.$person['limbs_amount'].'</td><td>'.$person['biography'].'</td><td>'.$abilities.'</td>';
       print '<tr>'.$current_user_info.$delete_user_button.$change_user_button.'</tr>';
     }
   } catch(PDOException $e) {
