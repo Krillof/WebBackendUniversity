@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $messages = array();
 
   $is_changing_data = (empty($errors) && !empty($_COOKIE[session_name()]) &&
-              session_start() && !empty($_SESSION['login'])) || is_admin();
+              session_start() && !empty($_SESSION['login'])) || is_admin($db);
 
   // В суперглобальном массиве $_COOKIE PHP хранит все имена и значения куки текущего запроса.
   // Выдаем сообщение об успешном сохранении.
@@ -47,10 +47,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       $_COOKIE['login'],
       $_COOKIE['pass']);
     
-  } else if ($is_changing_data && !is_admin()){
+  } else if ($is_changing_data && !is_admin($db)){
     $messages[] = '<a href="login.php">ВЫХОД</a>';
     $messages[] = 'Изменение данных:';
-  } else if (is_admin()){
+  } else if (is_admin($db)){
     $messages[] = 'Вы сейчас меняете пользователя в качестве админа.';
     $messages[] = '<a href="admin.php">Вернуться на основную страницу админа</a>';
   } else {
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
 
     printf('Вход с логином %s, uid %d', $_SESSION['login'], $_SESSION['uid']);
-  } else if (is_admin()) {
+  } else if (is_admin($db)) {
     try {
       if ($result = $db->query(
         "SELECT * FROM Person WHERE _login='".$_SERVER['ADMIN_IS_LOOKING_AT_THIS_USER']."';"
@@ -181,7 +181,7 @@ else {
 
   // Проверяем меняются ли ранее сохраненные данные или отправляются новые.
   if ((!empty($_COOKIE[session_name()]) &&
-      session_start() && !empty($_SESSION['login'])) || is_admin()) {
+      session_start() && !empty($_SESSION['login'])) || is_admin($db)) {
 
     $stmt = $db->prepare(
       "UPDATE Person ".

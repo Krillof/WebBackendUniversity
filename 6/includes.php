@@ -29,7 +29,7 @@ $user = 'u53304';
 $pass = '1449484';
 $db = new PDO('mysql:host=localhost;dbname='.$user, $user, $pass, [PDO::ATTR_PERSISTENT => true]);
 
-function is_admin(){
+function is_admin($db){
     if (!isset($_SERVER['ADMIN_IS_LOOKING_AT_THIS_USER'])){
         try {
             $stmt = $db->prepare(
@@ -46,9 +46,9 @@ function is_admin(){
         }
         $_SERVER['ADMIN_IS_LOOKING_AT_THIS_USER'] = '1';
     }
-    return !(empty($_SERVER['PHP_AUTH_USER']) ||
-        empty($_SERVER['PHP_AUTH_PW']) ||
-        $_SERVER['PHP_AUTH_USER'] != 'admin' ||
-        md5($_SERVER['PHP_AUTH_PW']) != md5('123'));
+    return !empty($_SERVER['PHP_AUTH_USER']) &&
+        !empty($_SERVER['PHP_AUTH_PW']) &&
+        $_SERVER['PHP_AUTH_USER'] == 'admin' &&
+        md5($_SERVER['PHP_AUTH_PW']) == md5('123');
 }
 ?>
