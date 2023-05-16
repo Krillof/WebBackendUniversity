@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       $_COOKIE['login'],
       $_COOKIE['pass']);
     
-  } else if ($is_changing_data){
+  } else if ($is_changing_data && !is_admin()){
     $messages[] = '<a href="login.php">ВЫХОД</a>';
     $messages[] = 'Изменение данных:';
   } else if (is_admin()){
