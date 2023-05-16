@@ -1,27 +1,6 @@
 <?php
 
-function is_admin(){
-    if (!isset($_SERVER['ADMIN_IS_LOOKING_AT_THIS_USER'])){
-        try {
-            $stmt = $db->prepare(
-              "SELECT id FROM Person;"
-            );
-            $stmt->execute();
-        
-            if ($person = $stmt->fetch()){
-                $_SERVER['ADMIN_IS_LOOKING_AT_THIS_USER'] = $person['id'];
-            }
-        }
-        catch(PDOException $e) {
-            send_error_and_exit($e->message,"500");
-        }
-        $_SERVER['ADMIN_IS_LOOKING_AT_THIS_USER'] = '1';
-    }
-    return !(empty($_SERVER['PHP_AUTH_USER']) ||
-        empty($_SERVER['PHP_AUTH_PW']) ||
-        $_SERVER['PHP_AUTH_USER'] != 'admin' ||
-        md5($_SERVER['PHP_AUTH_PW']) != md5('123'));
-}
+
 
 function send_error_and_exit($error_message, $error_code="400"){
     header("HTTP/1.1 " . $error_code . " " . $error_message);
@@ -50,4 +29,26 @@ $user = 'u53304';
 $pass = '1449484';
 $db = new PDO('mysql:host=localhost;dbname='.$user, $user, $pass, [PDO::ATTR_PERSISTENT => true]);
 
+function is_admin(){
+    if (!isset($_SERVER['ADMIN_IS_LOOKING_AT_THIS_USER'])){
+        try {
+            $stmt = $db->prepare(
+              "SELECT id FROM Person;"
+            );
+            $stmt->execute();
+        
+            if ($person = $stmt->fetch()){
+                $_SERVER['ADMIN_IS_LOOKING_AT_THIS_USER'] = $person['id'];
+            }
+        }
+        catch(PDOException $e) {
+            send_error_and_exit($e->message,"500");
+        }
+        $_SERVER['ADMIN_IS_LOOKING_AT_THIS_USER'] = '1';
+    }
+    return !(empty($_SERVER['PHP_AUTH_USER']) ||
+        empty($_SERVER['PHP_AUTH_PW']) ||
+        $_SERVER['PHP_AUTH_USER'] != 'admin' ||
+        md5($_SERVER['PHP_AUTH_PW']) != md5('123'));
+}
 ?>
