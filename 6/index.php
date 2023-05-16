@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       if ($result = $db->query(
         "SELECT * FROM Person WHERE id=".$_SERVER['ADMIN_IS_LOOKING_AT_THIS_USER'].";"
       )){
-        $obj = $result->fetchAll()[0];
+        $obj = $result->fetch();
         foreach ($columns as $column)
           $values[$column] = empty($obj[$column]) ? '' : $obj[$column];
       }
