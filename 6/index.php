@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   } else if (is_admin($db)) {
     try {
       if ($result = $db->query(
-        "SELECT * FROM Person WHERE id=".$_SERVER['ADMIN_IS_LOOKING_AT_THIS_USER'].";"
+        "SELECT * FROM Person WHERE id=".$GLOBALS['ADMIN_IS_LOOKING_AT_THIS_USER'].";"
       )){
         $obj = $result->fetch();
         foreach ($columns as $column)
@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     } catch(PDOException $e) {
       send_error_and_exit($e->message,"500");
     }
-    printf('Проверка: '.$_SERVER['ADMIN_IS_LOOKING_AT_THIS_USER'].'<br>');
+    printf('Проверка: '.$GLOBALS['ADMIN_IS_LOOKING_AT_THIS_USER'].'<br>');
     printf('Вы, в качестве админа, меняете данные пользователя %s', $values['full_name']);
   } else {
     // Складываем предыдущие значения полей в массив, если есть.

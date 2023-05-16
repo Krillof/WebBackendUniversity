@@ -30,7 +30,7 @@ $pass = '1449484';
 $db = new PDO('mysql:host=localhost;dbname='.$user, $user, $pass, [PDO::ATTR_PERSISTENT => true]);
 
 function is_admin($db){
-    if (!isset($_SERVER['ADMIN_IS_LOOKING_AT_THIS_USER'])){
+    if (!isset($GLOBALS['ADMIN_IS_LOOKING_AT_THIS_USER'])){
         try {
             $stmt = $db->prepare(
               "SELECT id FROM Person;"
@@ -38,13 +38,12 @@ function is_admin($db){
             $stmt->execute();
         
             if ($person = $stmt->fetch()){
-                $_SERVER['ADMIN_IS_LOOKING_AT_THIS_USER'] = $person['id'];
+                $GLOBALS['ADMIN_IS_LOOKING_AT_THIS_USER'] = $person['id'];
             }
         }
         catch(PDOException $e) {
             send_error_and_exit($e->message,"500");
         }
-        $_SERVER['ADMIN_IS_LOOKING_AT_THIS_USER'] = '1';
     }
     return !empty($_SERVER['PHP_AUTH_USER']) &&
         !empty($_SERVER['PHP_AUTH_PW']) &&
