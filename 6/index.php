@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $messages[] = '<a href="login.php">ВХОД</a>';
   }
 
-  $is_admin_changing_something = is_admin($db) && isset($_GET['ADMIN_IS_LOOKING_AT_THIS_USER']);
+  $is_admin_changing_something = is_admin($db) && isset($_GET['ADMIN_IS_LOOKING_AT_THIS_USER']) && $_GET['ADMIN_IS_LOOKING_AT_THIS_USER'] != '';
 
   // Складываем признак ошибок в массив.
   $errors = array();
