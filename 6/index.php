@@ -57,9 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $messages[] = '<a href="login.php">ВХОД</a>';
   }
 
-  if (is_admin($db) && !isset($_GET['ADMIN_IS_LOOKING_AT_THIS_USER'])){
-    header('Location: ./admin.php');
-  }
+  $is_admin_changing_something = is_admin($db) && isset($_GET['ADMIN_IS_LOOKING_AT_THIS_USER']);
 
   // Складываем признак ошибок в массив.
   $errors = array();
@@ -108,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
 
     printf('Вход с логином %s, uid %d', $_SESSION['login'], $_SESSION['uid']);
-  } else if (is_admin($db)) {
+  } else if ($is_admin_changing_something) {
     $user_id = $_GET['ADMIN_IS_LOOKING_AT_THIS_USER'];
     try {
       if ($result = $db->query(
@@ -134,6 +132,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       send_error_and_exit($e->message,"500");
     }
     printf('Вы, в качестве админа, меняете данные пользователя %s', $values['full_name']);
+  } else if (is_admin($db)) {
+    //nothing
   } else {
     // Складываем предыдущие значения полей в массив, если есть.
     // При этом санитизуем все данные для безопасного отображения в браузере.
@@ -144,7 +144,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   // Включаем содержимое файла form.php.
   // В нем будут доступны переменные $messages, $errors и $values для вывода 
   // сообщений, полей с ранее заполненными данными и признаками ошибок.
-  include('form.php');
+  if (!$is_admin_changing_something)
+    include('form.php');
+  else
+    print '<div> Просто основная страница. </div>';
 }
 // Иначе, если запрос был методом POST, т.е. нужно проверить данные и сохранить их в XML-файл.
 else {

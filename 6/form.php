@@ -139,7 +139,7 @@
 
 
               <?php
-                if (is_admin($db)) {
+                if (isset($is_admin_changing_something) && $is_admin_changing_something) {
               ?>
 
                   <input hidden type="text" name="login" value="<?php print $values['login']; ?>"/>

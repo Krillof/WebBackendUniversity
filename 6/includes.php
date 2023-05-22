@@ -51,11 +51,4 @@ function is_admin($db){
         md5($_SERVER['PHP_AUTH_PW']) == md5('123');
 }
 
-function exit_from_admin(){
-    if(isset($_SERVER['PHP_AUTH_USER']))
-        unset($_SERVER['PHP_AUTH_USER']);       
-
-    if (isset($_SERVER['PHP_AUTH_PW']) && $_SERVER['PHP_AUTH_PW'] != '')
-        $_SERVER['PHP_AUTH_PW'] = '';
-}
 ?>

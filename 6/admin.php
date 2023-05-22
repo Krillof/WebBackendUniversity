@@ -26,17 +26,11 @@ if (!is_admin($db)) {
   exit();
 }
 
-print $_SERVER['PHP_AUTH_USER'].'   '.$_SERVER['PHP_AUTH_PW'];
-
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 ?>
 <h1> Панель администратора </h1>
 Вы успешно авторизовались и видите защищенные паролем данные.
-Вы теперь не можете создавать аккаунты как обычный пользователь.
-<form action="admin.php" method="POST">
-  <input type="submit" value="Нажмите сюда, чтобы снова стать обычным пользователем."/>
-</form>
 <br>
 
 <h2>Статистика:</h2> <br>
@@ -95,9 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       <div class="error"> Unknown type </div>
       <?php
     }
-  } else {
-    exit_from_admin();
-    header('Location: ./');
   }
 
 }
