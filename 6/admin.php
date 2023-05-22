@@ -82,6 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if ($_POST['type'] == 'delete'){
       $db->query('DELETE FROM Person_Ability WHERE person_id='.$id.';');
       $db->query('DELETE FROM Person WHERE id='.$id.';');
+      header('Location: ./admin.php');
     } else if ($_POST['type'] == 'change') {
       header('Location: ./?ADMIN_IS_LOOKING_AT_THIS_USER='.$id);
     } else {
