@@ -206,13 +206,22 @@ else {
   }
 
   // Проверяем меняются ли ранее сохраненные данные или отправляются новые.
-  if ((!empty($_COOKIE[session_name()]) &&
-      session_start() && !empty($_SESSION['login'])) || is_admin($db)) {
+  if (
+        (!empty($_COOKIE[session_name()]) &&
+        session_start() && !empty($_SESSION['login'])) 
+        || 
+        (is_admin($db) 
+        && isset($_POST['admin_changing_something'])
+        && $_POST['admin_changing_something']=='1')
+    ) {
 
     $login = '';
     $id = '';
 
-    if (is_admin($db) && $_POST['admin_changing_something']=='1'){
+    if (is_admin($db) 
+      && isset($_POST['admin_changing_something'])
+      && $_POST['admin_changing_something']=='1'
+      ){
       $login = $_POST['login'];
       $id = $_POST['id'];
     } else {
