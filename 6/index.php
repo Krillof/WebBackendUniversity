@@ -82,31 +82,51 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       session_start() && !empty($_SESSION['login'])) {
 
     try {
+      $user_id = -1;
       if ($result = $db->query(
         "SELECT * FROM Person WHERE _login='".$_POST['login']."';"
       )){
         $obj = $result->fetchAll()[0];
+        $user_id = $obj['id'];
         foreach ($columns as $column)
           $values[$column] = empty($obj[$column]) ? '' : $obj[$column];
       }
+
+      foreach ($db->query(
+        "SELECT * FROM Person_Ability WHERE person_id='.$user_id.';"
+        ) as $row){
+        
+          $values['powers'][]=$row['ability_id'];
+      }
+
     } catch(PDOException $e){
         send_error_and_exit($e->message,"500");
     }
 
     printf('Вход с логином %s, uid %d', $_SESSION['login'], $_SESSION['uid']);
   } else if (is_admin($db)) {
+    $user_id = $_GET['ADMIN_IS_LOOKING_AT_THIS_USER'];
     try {
       if ($result = $db->query(
-        "SELECT * FROM Person WHERE id=".$_SERVER['ADMIN_IS_LOOKING_AT_THIS_USER'].";"
+        "SELECT * FROM Person WHERE id=".$user_id.";"
       )){
         $obj = $result->fetch();
         foreach ($columns as $column)
           $values[$column] = empty($obj[$column]) ? '' : $obj[$column];
       }
+
+      $values['powers']=array();
+
+      foreach ($db->query(
+        "SELECT * FROM Person_Ability WHERE person_id='.$user_id.';"
+        ) as $row){
+        
+          $values['powers'][]=$row['ability_id'];
+      }
+
     } catch(PDOException $e) {
       send_error_and_exit($e->message,"500");
     }
-    printf('Проверка: '.$_GET['ADMIN_IS_LOOKING_AT_THIS_USER'].'<br>');
     printf('Вы, в качестве админа, меняете данные пользователя %s', $values['full_name']);
   } else {
     // Складываем предыдущие значения полей в массив, если есть.
