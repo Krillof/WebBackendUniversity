@@ -82,8 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       $db->query('DELETE FROM Person_Ability WHERE person_id='.$id.';');
       $db->query('DELETE FROM Person WHERE id='.$id.';');
     } else if ($_POST['type'] == 'change') {
-      $GLOBALS['ADMIN_IS_LOOKING_AT_THIS_USER'] = $id;
-      header('Location: ./');
+      header('Location: ./?ADMIN_IS_LOOKING_AT_THIS_USER='.$id);
     } else {
       ?> 
       <div class="error"> Unknown type </div>

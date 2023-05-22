@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     } catch(PDOException $e) {
       send_error_and_exit($e->message,"500");
     }
-    printf('Проверка: '.$_SERVER['ADMIN_IS_LOOKING_AT_THIS_USER'].'<br>');
+    printf('Проверка: '.$_GET['ADMIN_IS_LOOKING_AT_THIS_USER'].'<br>');
     printf('Вы, в качестве админа, меняете данные пользователя %s', $values['full_name']);
   } else {
     // Складываем предыдущие значения полей в массив, если есть.
