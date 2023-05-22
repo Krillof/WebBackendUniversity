@@ -312,7 +312,10 @@ else {
     }
   }
 
-  if (is_admin($db)){
+  if (is_admin($db)
+    && isset($_POST['admin_changing_something'])
+    && $_POST['admin_changing_something']=='1')
+    {
     // Делаем перенаправление.
     header('Location: ./admin.php');
 
