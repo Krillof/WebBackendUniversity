@@ -55,7 +55,7 @@ function exit_from_admin(){
     if(isset($_SERVER['PHP_AUTH_USER']))
         unset($_SERVER['PHP_AUTH_USER']);       
 
-    if (isset($_SERVER['PHP_AUTH_PW']))
-        unset($_SERVER['PHP_AUTH_PW']);
+    if (isset($_SERVER['PHP_AUTH_PW']) && $_SERVER['PHP_AUTH_PW'] != '')
+        $_SERVER['PHP_AUTH_PW'] = '';
 }
 ?>
