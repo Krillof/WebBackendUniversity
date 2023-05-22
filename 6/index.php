@@ -126,8 +126,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           $values['powers'][]=$row['ability_id'];
       }
 
-      $values['login'] = ;
-
     } catch(PDOException $e) {
       send_error_and_exit($e->message,"500");
     }
