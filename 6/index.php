@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   // Включаем содержимое файла form.php.
   // В нем будут доступны переменные $messages, $errors и $values для вывода 
   // сообщений, полей с ранее заполненными данными и признаками ошибок.
-  if (!$is_admin_changing_something)
+  if ($is_admin_changing_something)
     include('form.php');
   else
     print '<div> Просто основная страница. </div>';
