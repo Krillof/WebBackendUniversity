@@ -138,6 +138,16 @@
               </label><br>
 
 
+              <?php
+                if (is_admin($db)) {
+              ?>
+
+                  <input hidden type="text" name="login" value="<?php print $values['login']; ?>"/>
+                  <input hidden type="text" name="id" value="<?php print $values['id']; ?>"/>
+
+              <?php
+                }
+              ?>
 
               <?php
                 if (!$is_changing_data) {

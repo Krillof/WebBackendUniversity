@@ -111,6 +111,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         "SELECT * FROM Person WHERE id=".$user_id.";"
       )){
         $obj = $result->fetch();
+        $values['login'] = $obj['login'];
+        $values['id'] = $obj['id'];
         foreach ($columns as $column)
           $values[$column] = empty($obj[$column]) ? '' : $obj[$column];
       }
@@ -123,6 +125,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         
           $values['powers'][]=$row['ability_id'];
       }
+
+      $values['login'] = ;
 
     } catch(PDOException $e) {
       send_error_and_exit($e->message,"500");
@@ -204,11 +208,23 @@ else {
   if ((!empty($_COOKIE[session_name()]) &&
       session_start() && !empty($_SESSION['login'])) || is_admin($db)) {
 
+    $login = '';
+    $id = '';
+
+    if (is_admin($db)){
+      $login = $_POST['login'];
+      $id = $_POST['id'];
+    } else {
+      $login = $_SESSION['login'];
+      $id = $_SESSION['uid'];
+    }
+
+
     $stmt = $db->prepare(
       "UPDATE Person ".
       "SET full_name=:full_name, email=:email, birth_year=:birth_year, ".
       "is_male=:is_male, limbs_amount=:limbs_amount, biography=:biography ".
-      "WHERE _login='".$_SESSION['login']."';"
+      "WHERE _login='".$login."';"
       );
     $stmtErr = $stmt -> execute(
           [
@@ -226,19 +242,18 @@ else {
 
     $deleted_count = $db->exec(
         "DELETE FROM Person_Ability ".
-        "WHERE person_id=".$_SESSION['uid'].";"
+        "WHERE person_id=".$id.";"
     );
 
     foreach ($_POST['powers'] as $item) {
       $stmt = $db->prepare(
         "INSERT INTO Person_Ability (person_id, ability_id) VALUES (:p, :a);"
       );
-      $stmtErr = $stmt->execute(['p' => intval($_SESSION['uid']), 'a' => $item]);
+      $stmtErr = $stmt->execute(['p' => intval($id), 'a' => $item]);
       if (!$stmtErr)
         send_error_and_exit("Problem with giving ability to person","500");
     }
-  }
-  else {
+  } else {
     // Генерируем уникальный логин и пароль.
     $login = generate_random_string(15);
     $pass = generate_random_string(15);
