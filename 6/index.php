@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         "SELECT * FROM Person WHERE id=".$user_id.";"
       )){
         $obj = $result->fetch();
-        $values['login'] = $obj['login'];
+        $values['login'] = $obj['_login'];
         $values['id'] = $obj['id'];
         foreach ($columns as $column)
           $values[$column] = empty($obj[$column]) ? '' : $obj[$column];
