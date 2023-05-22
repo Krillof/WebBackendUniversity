@@ -57,6 +57,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $messages[] = '<a href="login.php">ВХОД</a>';
   }
 
+  if (is_admin($db) && !isset($_GET['ADMIN_IS_LOOKING_AT_THIS_USER'])){
+    header('Location: ./admin.php');
+  }
+
   // Складываем признак ошибок в массив.
   $errors = array();
 
