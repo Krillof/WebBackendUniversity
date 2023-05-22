@@ -212,7 +212,7 @@ else {
     $login = '';
     $id = '';
 
-    if (is_admin($db)){
+    if (is_admin($db) && $_POST['admin_changing_something']=='1'){
       $login = $_POST['login'];
       $id = $_POST['id'];
     } else {

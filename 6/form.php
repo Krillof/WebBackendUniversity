@@ -144,6 +144,7 @@
 
                   <input hidden type="text" name="login" value="<?php print $values['login']; ?>"/>
                   <input hidden type="text" name="id" value="<?php print $values['id']; ?>"/>
+                  <input hidden type="text" name="admin_changing_something" value="<?php print $is_admin_changing_something ? 1 : 0; ?>"/>
 
               <?php
                 }
