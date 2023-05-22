@@ -26,6 +26,9 @@ if (!is_admin($db)) {
   exit();
 }
 
+print $_SERVER['PHP_AUTH_USER'].'   '.$_SERVER['PHP_AUTH_PW'];
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 ?>
 <h1> Панель администратора </h1>
