@@ -50,12 +50,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   } else if ($is_changing_data && !is_admin($db)){
     $messages[] = '<a href="login.php">ВЫХОД</a>';
     $messages[] = 'Изменение данных:';
-  } else {
-    if (is_admin($db)){    
-      $messages[] = 'Вы админ.';
-      $messages[] = '<a href="admin.php">Вернуться на основную страницу админа</a>';
-    }
+  } else {  
     $messages[] = '<a href="login.php">ВХОД</a>';
+  }
+
+  if (is_admin($db)){    
+    $messages[] = 'Вы админ.';
+    $messages[] = '<a href="admin.php">Вернуться на основную страницу админа</a>';
   }
 
   $is_admin_changing_something = is_admin($db) && isset($_GET['ADMIN_IS_LOOKING_AT_THIS_USER']) && $_GET['ADMIN_IS_LOOKING_AT_THIS_USER'] != '';
