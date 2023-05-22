@@ -52,6 +52,10 @@ function is_admin($db){
 }
 
 function exit_from_admin(){
+    if(isset($_SERVER['PHP_AUTH_USER']))
+        unset($_SERVER['PHP_AUTH_USER']);       
 
+    if (isset($_SERVER['PHP_AUTH_PW']))
+        unset($_SERVER['PHP_AUTH_PW']);
 }
 ?>

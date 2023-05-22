@@ -93,7 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       <?php
     }
   } else {
-
+    exit_from_admin();
+    header('Location: ./');
   }
 
 }
